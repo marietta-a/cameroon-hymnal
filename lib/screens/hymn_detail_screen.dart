@@ -1,9 +1,11 @@
 // lib/screens/hymn_detail_screen.dart
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hymnal/models/hymn.dart';
 import 'package:hymnal/providers/favorites_provider.dart';
 import 'package:hymnal/providers/font_provider.dart';
+import 'package:hymnal/widgets/app_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,6 +58,9 @@ class HymnDetailScreen extends StatelessWidget {
               ),
             ],
           ),
+          bottomNavigationBar: Platform.isAndroid
+              ? const SafeArea(child: AppBanner())
+              : null,
           body: Stack(
             children: [
               // --- Layer 1: The scrollable lyrics ---

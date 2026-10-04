@@ -11,6 +11,7 @@ import 'package:hymnal/providers/theme_provider.dart';
 import 'package:hymnal/screens/game_screen.dart';
 import 'package:hymnal/screens/settings_screen.dart';
 import 'package:hymnal/services/notification_service.dart';
+import 'package:hymnal/widgets/app_banner.dart';
 import 'package:hymnal/widgets/hymn_list_tile.dart';
 import 'package:hymnal/widgets/search_bar.dart';
 import 'package:in_app_update/in_app_update.dart';
@@ -160,74 +161,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAppBanner() {
-    return GestureDetector(
-      onTap: () async {
-        final uri = Uri.parse('https://play.google.com/store/apps/details?id=com.notebook_bms.notebook_bms');
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri, mode: LaunchMode.externalApplication);
-        }
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        color: const Color.fromARGB(255, 21, 146, 168),
-        child: Row(
-          children: [
-            const Icon(Icons.download, color: Colors.white, size: 28),
-            const SizedBox(width: 12),
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Ace Your Biomedical Research and Studies',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
-                  ),
-                  Text(
-                    'With Notebook BMS',
-                    style: TextStyle(color: Colors.white70, fontSize: 11),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Text(
-                'Download',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 21, 146, 168),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildBannerArea() {
     // When no ad is loaded (iOS or before first ad loads), always show the WhatsApp banner.
     if (!_isBannerAdLoaded || _bannerAd == null){
-      return Platform.isAndroid ? _buildAppBanner() : SizedBox.shrink();
+      return Platform.isAndroid ? AppBanner() : SizedBox.shrink();
     }
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 600),
       transitionBuilder: (child, animation) =>
           FadeTransition(opacity: animation, child: child),
       child: _showWhatsAppBanner
-          ? KeyedSubtree(key: const ValueKey('app_banner'), child: Platform.isAndroid ? _buildAppBanner() : _buildWhatsAppBanner())
+          ? KeyedSubtree(key: const ValueKey('app_banner'), child: Platform.isAndroid ? AppBanner() : _buildWhatsAppBanner())
           : KeyedSubtree(key: const ValueKey('ad_banner'), child: _buildAdWidget()),
     );
   }

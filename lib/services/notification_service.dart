@@ -40,7 +40,10 @@ class NotificationService {
     );
 
     await _plugin.initialize(
-      const InitializationSettings(android: androidSettings, iOS: iosSettings),
+      settings: const InitializationSettings(
+        android: androidSettings,
+        iOS: iosSettings,
+      ),
     );
 
     await _createAndroidChannels();
@@ -96,10 +99,11 @@ class NotificationService {
     );
 
     _plugin.show(
-      _updateNotifId,
-      'Update Ready to Install',
-      'A new version is now available.',
-      const NotificationDetails(android: androidDetails, iOS: iosDetails),
+      id: _updateNotifId,
+      title: 'Update Ready to Install',
+      body: 'A new version is now available.',
+      notificationDetails:
+          const NotificationDetails(android: androidDetails, iOS: iosDetails),
     );
   }
 
@@ -128,11 +132,12 @@ class NotificationService {
     );
 
     await _plugin.zonedSchedule(
-      _dailyHymnNotifId,
-      '🎵 $title',
-      body,
-      _nextOccurrence(time),
-      const NotificationDetails(android: androidDetails, iOS: iosDetails),
+      id: _dailyHymnNotifId,
+      title: '🎵 $title',
+      body: body,
+      scheduledDate: _nextOccurrence(time),
+      notificationDetails:
+          const NotificationDetails(android: androidDetails, iOS: iosDetails),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
     );
@@ -145,7 +150,7 @@ class NotificationService {
 
   /// Cancel the daily notification and clear the saved preference.
   Future<void> cancelDailyHymnNotification() async {
-    await _plugin.cancel(_dailyHymnNotifId);
+    await _plugin.cancel(id: _dailyHymnNotifId);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_enabledKey, false);
   }
