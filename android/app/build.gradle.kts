@@ -65,6 +65,9 @@ android {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // play-services-ads pulls in work-runtime 2.7.0 (Room 2.2.5), whose WorkDatabase
+    // is broken by R8 full mode and crashes at startup in release builds.
+    implementation("androidx.work:work-runtime:2.10.0")
 }
 
 

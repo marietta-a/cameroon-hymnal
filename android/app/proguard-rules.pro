@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# WorkManager / Room: keep the generated database implementation so
+# androidx.startup can instantiate WorkDatabase in minified release builds.
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
+-keep class androidx.work.impl.WorkDatabase_Impl { *; }
